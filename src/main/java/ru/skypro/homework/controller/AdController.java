@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.model.Ad;
 
 @RestController
 @RequestMapping("/ads")
@@ -15,7 +15,7 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity<Ads> getAllAds() {
-        // Логика получения всех объявлений
+        // логика
         return ResponseEntity.ok(new Ads());
     }
 
@@ -23,19 +23,17 @@ public class AdController {
     public ResponseEntity<Ad> addAd(
             @RequestParam("image") MultipartFile image,
             @RequestParam("properties") CreateOrUpdateAd properties) {
-        // Логика добавления объявления
         return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> getAd(@PathVariable Long id) {
-        // Логика получения информации об объявлении
+        // логика
         return ResponseEntity.ok(new ExtendedAd());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAd(@PathVariable Long id) {
-        // Логика удаления объявления
         return ResponseEntity.noContent().build();
     }
 
@@ -43,13 +41,13 @@ public class AdController {
     public ResponseEntity<Ad> updateAd(
             @PathVariable Long id,
             @RequestBody CreateOrUpdateAd updateAd) {
-        // Логика обновления объявления
+        // логика
         return ResponseEntity.ok(new Ad());
     }
 
     @GetMapping("/me")
     public ResponseEntity<Ads> getAdsMe() {
-        // Логика получения объявлений авторизованного пользователя
+        // логика
         return ResponseEntity.ok(new Ads());
     }
 
@@ -57,7 +55,7 @@ public class AdController {
     public ResponseEntity<byte[]> updateAdImage(
             @PathVariable Long id,
             @RequestParam("image") MultipartFile image) {
-        // Логика обновления картинки объявления
+        // логика
         return ResponseEntity.ok(new byte[0]);
     }
 }

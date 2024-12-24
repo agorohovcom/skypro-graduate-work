@@ -2,7 +2,7 @@ package ru.skypro.homework.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.model.Comment;
 
 import java.util.List;
 
