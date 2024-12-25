@@ -1,7 +1,8 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
@@ -11,51 +12,56 @@ import ru.skypro.homework.model.Ad;
 
 @RestController
 @RequestMapping("/ads")
+@RequiredArgsConstructor
+@Tag(name = "Объявления", description = "API для работы с объявлениями")
 public class AdController {
 
+//    private final AdService adService;
+
     @GetMapping
-    public ResponseEntity<AdsDto> getAllAds() {
-        // логика
-        return ResponseEntity.ok(new AdsDto());
+    @Operation(summary = "Получение всех объявлений")
+    public AdsDto getAllAds() {
+//        return adService.getAllAds();
+        return new AdsDto();
     }
 
     @PostMapping
-    public ResponseEntity<Ad> addAd(
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("properties") CreateOrUpdateAdDto properties) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
+    @Operation(summary = "Добавление объявления")
+    public Long addAd(@RequestPart("properties") CreateOrUpdateAdDto ad, @RequestPart("image") MultipartFile image) {
+//        return adService.addAd(ad, image);
+        return 1L;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAd(@PathVariable Long id) {
-        // логика
-        return ResponseEntity.ok(new ExtendedAdDto());
+    @Operation(summary = "Получение информации об объявлении")
+    public ExtendedAdDto getAd(@PathVariable Long id) {
+//        return adService.getAd(id);
+        return new ExtendedAdDto();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAd(@PathVariable Long id) {
-        return ResponseEntity.noContent().build();
+    @Operation(summary = "Удаление объявления")
+    public void deleteAd(@PathVariable Long id) {
+//        adService.deleteAd(id);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> updateAd(
-            @PathVariable Long id,
-            @RequestBody CreateOrUpdateAdDto updateAd) {
-        // логика
-        return ResponseEntity.ok(new Ad());
+    @Operation(summary = "Обновление информации об объявлении")
+    public Ad updateAd(@PathVariable Long id, @RequestBody CreateOrUpdateAdDto ad) {
+//        return adService.updateAd(id, ad);
+        return new Ad();
     }
 
     @GetMapping("/me")
-    public ResponseEntity<AdsDto> getAdsMe() {
-        // логика
-        return ResponseEntity.ok(new AdsDto());
+    @Operation(summary = "Получение объявлений авторизованного пользователя")
+    public AdsDto getAdsMe() {
+//        return adService.getAdsMe();
+        return new AdsDto();
     }
 
     @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> updateAdImage(
-            @PathVariable Long id,
-            @RequestParam("image") MultipartFile image) {
-        // логика
-        return ResponseEntity.ok(new byte[0]);
+    @Operation(summary = "Обновление картинки объявления")
+    public void updateAdImage(@PathVariable Long id, @RequestParam("image") MultipartFile image) {
+//        adService.updateAdImage(id, image);
     }
 }
