@@ -2,8 +2,8 @@ package ru.skypro.homework.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.CommentsDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.model.Comment;
 
 @RestController
@@ -11,13 +11,13 @@ import ru.skypro.homework.model.Comment;
 public class CommentController {
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Comments> getComments(@PathVariable Long id) {
+    public ResponseEntity<CommentsDto> getComments(@PathVariable Long id) {
         // логика
-        return ResponseEntity.ok(new Comments());
+        return ResponseEntity.ok(new CommentsDto());
     }
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody CreateOrUpdateComment comment) {
+    public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDto comment) {
         // логика
         return ResponseEntity.ok(new Comment());
     }
@@ -32,7 +32,7 @@ public class CommentController {
     public ResponseEntity<Comment> updateComment(
             @PathVariable Long adId,
             @PathVariable Long commentId,
-            @RequestBody CreateOrUpdateComment comment) {
+            @RequestBody CreateOrUpdateCommentDto comment) {
         // Логика обновления комментария
         return ResponseEntity.ok(new Comment());
     }

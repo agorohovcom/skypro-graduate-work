@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateOrUpdateAdDto;
+import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
 
 @RestController
@@ -14,22 +14,22 @@ import ru.skypro.homework.model.Ad;
 public class AdController {
 
     @GetMapping
-    public ResponseEntity<Ads> getAllAds() {
+    public ResponseEntity<AdsDto> getAllAds() {
         // логика
-        return ResponseEntity.ok(new Ads());
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @PostMapping
     public ResponseEntity<Ad> addAd(
             @RequestParam("image") MultipartFile image,
-            @RequestParam("properties") CreateOrUpdateAd properties) {
+            @RequestParam("properties") CreateOrUpdateAdDto properties) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new Ad());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAd> getAd(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDto> getAd(@PathVariable Long id) {
         // логика
-        return ResponseEntity.ok(new ExtendedAd());
+        return ResponseEntity.ok(new ExtendedAdDto());
     }
 
     @DeleteMapping("/{id}")
@@ -40,15 +40,15 @@ public class AdController {
     @PatchMapping("/{id}")
     public ResponseEntity<Ad> updateAd(
             @PathVariable Long id,
-            @RequestBody CreateOrUpdateAd updateAd) {
+            @RequestBody CreateOrUpdateAdDto updateAd) {
         // логика
         return ResponseEntity.ok(new Ad());
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Ads> getAdsMe() {
+    public ResponseEntity<AdsDto> getAdsMe() {
         // логика
-        return ResponseEntity.ok(new Ads());
+        return ResponseEntity.ok(new AdsDto());
     }
 
     @PatchMapping("/{id}/image")

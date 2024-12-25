@@ -3,8 +3,8 @@ package ru.skypro.homework.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.model.User;
 
 @RestController
@@ -12,7 +12,7 @@ import ru.skypro.homework.model.User;
 public class UserController {
 
     @PatchMapping("/set_password")
-    public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<Void> setPassword(@RequestBody NewPasswordDto newPassword) {
         // Логика обновления пароля
         return ResponseEntity.ok().build();
     }
@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
+    public ResponseEntity<UpdateUserDto> updateUser(@RequestBody UpdateUserDto updateUser) {
         // Логика обновления информации о пользователе
         return ResponseEntity.ok(updateUser);
     }

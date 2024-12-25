@@ -47,7 +47,8 @@ public class WebSecurityConfig {
                         authorize ->
                                 authorize
                                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                                        .requestMatchers("/ads/**", "/users/**").authenticated()
+                                        .requestMatchers("/ads/**", "/users/**")
+                                        .authenticated()
                 )
                 .httpBasic(withDefaults());
         return http.build();
