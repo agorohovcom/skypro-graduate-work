@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.service.AdService;
 
 @RestController
 @RequestMapping("/ads")
@@ -16,7 +17,8 @@ import ru.skypro.homework.model.Ad;
 @Tag(name = "Объявления", description = "API для работы с объявлениями")
 public class AdController {
 
-//    private final AdService adService;
+    // todo сервис ещё не реализован
+    private final AdService adService;
 
     @GetMapping
     @Operation(summary = "Получение всех объявлений")

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.service.CommentService;
 
 @RestController
 @RequestMapping("/ads/{id}/comments")
@@ -14,7 +15,8 @@ import ru.skypro.homework.model.Comment;
 @Tag(name = "Комментарии", description = "API для работы с комментариями")
 public class CommentController {
 
-//    private final CommentService commentService;
+    // todo сервис ещё не реализован
+    private final CommentService commentService;
 
     @GetMapping
     @Operation(summary = "Получение комментариев объявления")
