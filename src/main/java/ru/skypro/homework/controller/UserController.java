@@ -16,41 +16,41 @@ import ru.skypro.homework.service.UserService;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@Tag(name = "Пользователи", description = "API для работы с пользователями")
+@Tag(name = "Пользователи")
 public class UserController {
 
     // todo сервис ещё не реализован
     private final UserService userService;
 
     @PatchMapping("/set_password")
-    @Operation(summary = "Обновление пароля")
-    public void setPassword(@RequestBody NewPassword newPassword) {
+    @Operation(summary = "Обновление пароля", operationId = "setPassword")
+    // todo 200, 400, 401
+    public void setPassword(@Valid @RequestBody NewPassword newPassword) {
         userService.setPassword(newPassword);
     }
 
-    // todo как понимать условие
-    //  "При выполнении цикла CRUD-операций (POST, GET, PUT, DELETE) не возвращается статус ответа 200."?
     @GetMapping("/me")
-    @Operation(summary = "Получение информации об авторизованном пользователе")
-    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Получение информации об авторизованном пользователе", operationId = "getUser")
+    // todo 200, 401
     public User getUser() {
-        User authenticateduser = userService.getUser();
+        User authenticatedUser = userService.getUser();
 
-        if (authenticateduser != null) {
-            return authenticateduser;
+        if (authenticatedUser != null) {
+            return authenticatedUser;
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Пользователь не авторизован");
         }
     }
 
     @PatchMapping("/me")
-    @Operation(summary = "Обновление информации об авторизованном пользователе")
+    @Operation(summary = "Обновление информации об авторизованном пользователе", operationId = "updateUser")
     @ResponseStatus(HttpStatus.OK)
-    public UpdateUser updateUser(@Valid @RequestBody UpdateUser updateUserDto) {
+    // todo 200, 400, 401
+    public UpdateUser updateUser(@Valid @RequestBody UpdateUser updateUser) {
         User authenticatedUser = getUser();
 
-        UpdateUser result = userService.updateUser(updateUserDto);
-        if (updateUserDto == null) {
+        UpdateUser result = userService.updateUser(updateUser);
+        if (updateUser == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь не найден или ошибка валидации");
         }
 
@@ -58,8 +58,9 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    @Operation(summary = "Обновление аватара авторизованного пользователя")
+    @Operation(summary = "Обновление аватара авторизованного пользователя", operationId = "updateUserImage")
     @ResponseStatus(HttpStatus.OK)
+    // todo 200, 401
     public void updateUserImage(@RequestParam("image") MultipartFile image) {
         User autentificatedUser = getUser();
         userService.updateUserImage(image);

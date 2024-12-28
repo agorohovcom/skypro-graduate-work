@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
@@ -20,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-@AutoConfigureMockMvc(addFilters = false) // убрать
-        // @MockUser
+// todo нужно убрать это и использовать @WithMockUser
+@AutoConfigureMockMvc(addFilters = false)
 class UserControllerWebMvcTest {
 
     @Autowired
@@ -34,17 +36,45 @@ class UserControllerWebMvcTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void setPasswordTest() throws Exception {
-        NewPassword newPasswordDto = new NewPassword();
-        newPasswordDto.setCurrentPassword("oldPassword");
-        newPasswordDto.setNewPassword("newPassword");
+    public void setPassword_SuccessTest() throws Exception {
+        NewPassword newPassword = new NewPassword();
+        newPassword.setCurrentPassword("old_password");
+        newPassword.setNewPassword("new_password");
 
         mockMvc.perform(patch("/users/set_password")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"currentPassword\":\"oldPassword\",\"newPassword\":\"newPassword\"}"))
+                        .content(objectMapper.writeValueAsString(newPassword)))
                 .andExpect(status().isOk());
 
-        verify(userService, times(1)).setPassword(newPasswordDto);
+        verify(userService, times(1)).setPassword(newPassword);
+    }
+
+    @Test
+    public void setPassword_ValidationFailedTest() throws Exception {
+        NewPassword newPassword = new NewPassword();
+        newPassword.setCurrentPassword("short");
+        newPassword.setNewPassword("new_password");
+
+        mockMvc.perform(patch("/users/set_password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPassword)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void setPassword_UnauthorizedTest() throws Exception {
+        NewPassword newPassword = new NewPassword();
+        newPassword.setCurrentPassword("old_password");
+        newPassword.setNewPassword("new_password");
+
+        doThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Пользователь не авторизован"))
+                .when(userService)
+                .setPassword(any(NewPassword.class));
+
+        mockMvc.perform(patch("/users/set_password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPassword)))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test

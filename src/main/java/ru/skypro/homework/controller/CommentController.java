@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
@@ -12,39 +13,57 @@ import ru.skypro.homework.service.CommentService;
 @RestController
 @RequestMapping("/ads/{id}/comments")
 @RequiredArgsConstructor
-@Tag(name = "Комментарии", description = "API для работы с комментариями")
+@Tag(name = "Комментарии")
 public class CommentController {
 
     // todo сервис ещё не реализован
     private final CommentService commentService;
 
     @GetMapping
-    @Operation(summary = "Получение комментариев объявления")
-    public Comments getComments(@PathVariable Long id) {
-//        return commentService.getComments(id);
-        return new Comments();
+    @Operation(
+            summary = "Получение комментариев объявления",
+            operationId = "getComments"
+    )
+    // todo 200, 401, 404
+    public Comments getComments(@PathVariable Integer id) {
+        return commentService.getComments(id);
     }
 
     @PostMapping
-    @Operation(summary = "Добавление комментария к объявлению")
-    public Long addComment(@PathVariable Long id, @RequestBody CreateOrUpdateComment comment) {
-//        return commentService.addComment(id, comment);
-        return 1L;
+    @Operation(
+            summary = "Добавление комментария к объявлению",
+            operationId = "addComment"
+    )
+    // todo 200, 401, 404
+    public Long addComment(
+            @PathVariable Integer id,
+            @Valid @RequestBody CreateOrUpdateComment comment) {
+        return commentService.addComment(id, comment);
     }
 
     @DeleteMapping("/{commentId}")
-    @Operation(summary = "Удаление комментария")
-    public void deleteComment(@PathVariable Long id, @PathVariable Long commentId) {
-//        commentService.deleteComment(id, commentId);
+    @Operation(
+            summary = "Удаление комментария",
+            operationId = "deleteComment"
+    )
+    // todo 204, 401, 403, 404
+    public void deleteComment(
+            @PathVariable Integer adId,
+            @PathVariable Integer commentId
+    ) {
+        commentService.deleteComment(adId, commentId);
     }
 
     @PatchMapping("/{commentId}")
-    @Operation(summary = "Обновление комментария")
+    @Operation(
+            summary = "Обновление комментария",
+            operationId = "updateComment"
+    )
+    // todo 200, 401, 403, 404
     public Comment updateComment(
-            @PathVariable Long id,
-            @PathVariable Long commentId,
-            @RequestBody CreateOrUpdateComment comment) {
-//        return commentService.updateComment(id, commentId, comment);
-        return new Comment();
+            @PathVariable Integer adId,
+            @PathVariable Integer commentId,
+            @Valid @RequestBody CreateOrUpdateComment comment) {
+        return commentService.updateComment(adId, commentId, comment);
     }
 }

@@ -11,7 +11,7 @@ import ru.skypro.homework.service.UserService;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public void setPassword(NewPassword newPasswordDto) {
+    public void setPassword(NewPassword newPassword) {
 
     }
 
