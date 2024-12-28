@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.NewPasswordDto;
-import ru.skypro.homework.dto.UpdateUserDto;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
 @RestController
@@ -24,7 +24,7 @@ public class UserController {
 
     @PatchMapping("/set_password")
     @Operation(summary = "Обновление пароля")
-    public void setPassword(@RequestBody NewPasswordDto newPassword) {
+    public void setPassword(@RequestBody NewPassword newPassword) {
         userService.setPassword(newPassword);
     }
 
@@ -46,10 +46,10 @@ public class UserController {
     @PatchMapping("/me")
     @Operation(summary = "Обновление информации об авторизованном пользователе")
     @ResponseStatus(HttpStatus.OK)
-    public UpdateUserDto updateUser(@Valid @RequestBody UpdateUserDto updateUserDto) {
+    public UpdateUser updateUser(@Valid @RequestBody UpdateUser updateUserDto) {
         User authenticatedUser = getUser();
 
-        UpdateUserDto result = userService.updateUser(updateUserDto);
+        UpdateUser result = userService.updateUser(updateUserDto);
         if (updateUserDto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь не найден или ошибка валидации");
         }

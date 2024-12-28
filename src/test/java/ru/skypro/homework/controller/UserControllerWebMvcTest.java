@@ -9,9 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.skypro.homework.dto.NewPasswordDto;
-import ru.skypro.homework.dto.UpdateUserDto;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
 import static org.mockito.Mockito.*;
@@ -20,7 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc(addFilters = false) // убрать
+        // @MockUser
 class UserControllerWebMvcTest {
 
     @Autowired
@@ -34,7 +35,7 @@ class UserControllerWebMvcTest {
 
     @Test
     void setPasswordTest() throws Exception {
-        NewPasswordDto newPasswordDto = new NewPasswordDto();
+        NewPassword newPasswordDto = new NewPassword();
         newPasswordDto.setCurrentPassword("oldPassword");
         newPasswordDto.setNewPassword("newPassword");
 
@@ -76,7 +77,7 @@ class UserControllerWebMvcTest {
 
     @Test
     void updateUserTest_Success() throws Exception {
-        UpdateUserDto updateUserDto = new UpdateUserDto();
+        UpdateUser updateUserDto = new UpdateUser();
         updateUserDto.setFirstName("Barbara");
         updateUserDto.setLastName("Liskov");
 
@@ -84,7 +85,7 @@ class UserControllerWebMvcTest {
         autentificatedUser.setId(1L);
 
         when(userService.getUser()).thenReturn(autentificatedUser);
-        when(userService.updateUser(any(UpdateUserDto.class))).thenReturn(updateUserDto);
+        when(userService.updateUser(any(UpdateUser.class))).thenReturn(updateUserDto);
 
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,18 +101,18 @@ class UserControllerWebMvcTest {
 
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new UpdateUserDto())))
+                        .content(objectMapper.writeValueAsString(new UpdateUser())))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void testUpdateUser_BadRequest() throws Exception {
-        UpdateUserDto updateUserDto = null;
+        UpdateUser updateUserDto = null;
         User authenticatedUser = new User();
         authenticatedUser.setId(1L);
 
         when(userService.getUser()).thenReturn(authenticatedUser);
-        when(userService.updateUser(any(UpdateUserDto.class))).thenReturn(null);
+        when(userService.updateUser(any(UpdateUser.class))).thenReturn(null);
 
         mockMvc.perform(patch("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)

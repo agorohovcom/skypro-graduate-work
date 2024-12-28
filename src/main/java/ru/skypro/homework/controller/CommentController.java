@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentsDto;
-import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
-import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
 @RestController
@@ -20,14 +20,14 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "Получение комментариев объявления")
-    public CommentsDto getComments(@PathVariable Long id) {
+    public Comments getComments(@PathVariable Long id) {
 //        return commentService.getComments(id);
-        return new CommentsDto();
+        return new Comments();
     }
 
     @PostMapping
     @Operation(summary = "Добавление комментария к объявлению")
-    public Long addComment(@PathVariable Long id, @RequestBody CreateOrUpdateCommentDto comment) {
+    public Long addComment(@PathVariable Long id, @RequestBody CreateOrUpdateComment comment) {
 //        return commentService.addComment(id, comment);
         return 1L;
     }
@@ -43,7 +43,7 @@ public class CommentController {
     public Comment updateComment(
             @PathVariable Long id,
             @PathVariable Long commentId,
-            @RequestBody CreateOrUpdateCommentDto comment) {
+            @RequestBody CreateOrUpdateComment comment) {
 //        return commentService.updateComment(id, commentId, comment);
         return new Comment();
     }

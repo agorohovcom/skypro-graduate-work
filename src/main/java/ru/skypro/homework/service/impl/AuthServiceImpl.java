@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
 @Service
@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterDto register) {
+    public boolean register(Register register) {
         if (manager.userExists(register.getUsername())) {
             return false;
         }

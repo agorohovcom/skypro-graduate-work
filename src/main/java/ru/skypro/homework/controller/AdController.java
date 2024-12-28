@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.CreateOrUpdateAdDto;
-import ru.skypro.homework.dto.ExtendedAdDto;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
 @RestController
@@ -22,23 +22,23 @@ public class AdController {
 
     @GetMapping
     @Operation(summary = "Получение всех объявлений")
-    public AdsDto getAllAds() {
+    public Ads getAllAds() {
 //        return adService.getAllAds();
-        return new AdsDto();
+        return new Ads();
     }
 
     @PostMapping
     @Operation(summary = "Добавление объявления")
-    public Long addAd(@RequestPart("properties") CreateOrUpdateAdDto ad, @RequestPart("image") MultipartFile image) {
+    public Long addAd(@RequestPart("properties") CreateOrUpdateAd ad, @RequestPart("image") MultipartFile image) {
 //        return adService.addAd(ad, image);
         return 1L;
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении")
-    public ExtendedAdDto getAd(@PathVariable Long id) {
+    public ExtendedAd getAd(@PathVariable Long id) {
 //        return adService.getAd(id);
-        return new ExtendedAdDto();
+        return new ExtendedAd();
     }
 
     @DeleteMapping("/{id}")
@@ -49,16 +49,16 @@ public class AdController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Обновление информации об объявлении")
-    public Ad updateAd(@PathVariable Long id, @RequestBody CreateOrUpdateAdDto ad) {
+    public Ad updateAd(@PathVariable Long id, @RequestBody CreateOrUpdateAd ad) {
 //        return adService.updateAd(id, ad);
         return new Ad();
     }
 
     @GetMapping("/me")
     @Operation(summary = "Получение объявлений авторизованного пользователя")
-    public AdsDto getAdsMe() {
+    public Ads getAdsMe() {
 //        return adService.getAdsMe();
-        return new AdsDto();
+        return new Ads();
     }
 
     @PatchMapping("/{id}/image")
