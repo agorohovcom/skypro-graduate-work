@@ -80,7 +80,7 @@ class UserControllerWebMvcTest {
     @Test
     public void getUserTest_Success() throws Exception {
         User authenticatedUser = new User();
-        authenticatedUser.setId(1L);
+        authenticatedUser.setId(1);
         authenticatedUser.setFirstName("Barbara");
         authenticatedUser.setLastName("Liskov");
 
@@ -112,7 +112,7 @@ class UserControllerWebMvcTest {
         updateUserDto.setLastName("Liskov");
 
         User autentificatedUser = new User();
-        autentificatedUser.setId(1L);
+        autentificatedUser.setId(1);
 
         when(userService.getUser()).thenReturn(autentificatedUser);
         when(userService.updateUser(any(UpdateUser.class))).thenReturn(updateUserDto);
@@ -139,7 +139,7 @@ class UserControllerWebMvcTest {
     public void testUpdateUser_BadRequest() throws Exception {
         UpdateUser updateUserDto = null;
         User authenticatedUser = new User();
-        authenticatedUser.setId(1L);
+        authenticatedUser.setId(1);
 
         when(userService.getUser()).thenReturn(authenticatedUser);
         when(userService.updateUser(any(UpdateUser.class))).thenReturn(null);
@@ -153,7 +153,7 @@ class UserControllerWebMvcTest {
     @Test
     public void testUpdateUserImage_Success() throws Exception {
         User authenticatedUser = new User();
-        authenticatedUser.setId(1L);
+        authenticatedUser.setId(1);
 
         when(userService.getUser()).thenReturn(authenticatedUser);
 

@@ -7,7 +7,7 @@ import lombok.Data;
 public class ExtendedAd {
 
     @Schema(description = "id объявления")
-    private Long pk;
+    private Integer pk;
 
     @Schema(description = "имя автора объявления")
     private String authorFirstName;

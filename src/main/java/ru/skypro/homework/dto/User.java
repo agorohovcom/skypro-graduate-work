@@ -9,7 +9,7 @@ import lombok.Data;
 public class User {
 
     @Schema(description = "id пользователя")
-    private Long id;
+    private Integer id;
 
     @Schema(description = "логин пользователя")
     private String email;

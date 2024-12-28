@@ -7,13 +7,13 @@ import lombok.Data;
 public class Ad {
 
     @Schema(description = "id автора объявления")
-    private Long author;
+    private Integer author;
 
     @Schema(description = "ссылка на картинку объявления")
     private String image;
 
     @Schema(description = "id объявления")
-    private Long pk;
+    private Integer pk;
 
     @Schema(description = "цена объявления")
     private Integer price;

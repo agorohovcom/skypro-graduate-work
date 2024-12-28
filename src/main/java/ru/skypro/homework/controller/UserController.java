@@ -16,6 +16,7 @@ import ru.skypro.homework.service.UserService;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@CrossOrigin(value = "http://localhost:3000")
 @Tag(name = "Пользователи")
 public class UserController {
 
@@ -23,14 +24,20 @@ public class UserController {
     private final UserService userService;
 
     @PatchMapping("/set_password")
-    @Operation(summary = "Обновление пароля", operationId = "setPassword")
-    // todo 200, 400, 401
+    @Operation(
+            summary = "Обновление пароля",
+            operationId = "setPassword"
+    )
+    // todo 200, 401
     public void setPassword(@Valid @RequestBody NewPassword newPassword) {
         userService.setPassword(newPassword);
     }
 
     @GetMapping("/me")
-    @Operation(summary = "Получение информации об авторизованном пользователе", operationId = "getUser")
+    @Operation(
+            summary = "Получение информации об авторизованном пользователе",
+            operationId = "getUser"
+    )
     // todo 200, 401
     public User getUser() {
         User authenticatedUser = userService.getUser();
@@ -43,9 +50,11 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    @Operation(summary = "Обновление информации об авторизованном пользователе", operationId = "updateUser")
-    @ResponseStatus(HttpStatus.OK)
-    // todo 200, 400, 401
+    @Operation(
+            summary = "Обновление информации об авторизованном пользователе",
+            operationId = "updateUser"
+    )
+    // todo 200, 401
     public UpdateUser updateUser(@Valid @RequestBody UpdateUser updateUser) {
         User authenticatedUser = getUser();
 
@@ -58,8 +67,10 @@ public class UserController {
     }
 
     @PatchMapping("/me/image")
-    @Operation(summary = "Обновление аватара авторизованного пользователя", operationId = "updateUserImage")
-    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Обновление аватара авторизованного пользователя",
+            operationId = "updateUserImage"
+    )
     // todo 200, 401
     public void updateUserImage(@RequestParam("image") MultipartFile image) {
         User autentificatedUser = getUser();
