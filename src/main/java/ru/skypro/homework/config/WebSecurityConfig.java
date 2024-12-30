@@ -1,8 +1,11 @@
 package ru.skypro.homework.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +17,8 @@ import ru.skypro.homework.dto.Role;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
+@OpenAPIDefinition
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -39,17 +44,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated())
-                .cors()
-                .and()
+                        authorize ->
+                                authorize
+                                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                                        .requestMatchers("/ads/**", "/users/**")
+                                        .authenticated()
+                )
                 .httpBasic(withDefaults());
         return http.build();
     }
@@ -58,5 +60,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
