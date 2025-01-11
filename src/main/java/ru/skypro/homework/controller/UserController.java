@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.security_dto.NewPassword;
+import ru.skypro.homework.dto.create_update_dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UserService;
 
@@ -41,7 +41,6 @@ public class UserController {
     // todo 200, 401
     public User getUser() {
         User authenticatedUser = userService.getUser();
-
         if (authenticatedUser != null) {
             return authenticatedUser;
         } else {

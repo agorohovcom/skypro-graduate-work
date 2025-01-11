@@ -4,11 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
@@ -32,17 +34,16 @@ public class AdController {
         return adService.getAllAds();
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Добавление объявления",
             operationId = "addAd"
     )
     // todo 201, 401
-    public Integer addAd(
-            @Valid @RequestPart("properties") CreateOrUpdateAd ad,
-            @RequestPart("image") MultipartFile image
-    ) {
-        return adService.addAd(ad, image);
+    public Ad addAd(@RequestPart(name = "properties") CreateOrUpdateAd createOrUpdateAd,
+                    @RequestPart(name = "image") MultipartFile image)
+    {
+        return adService.addAd(createOrUpdateAd);
     }
 
     @GetMapping("/{id}")
@@ -84,7 +85,7 @@ public class AdController {
             operationId = "getAdsMe"
     )
     // todo 200, 401
-    public Ads getAdsMe() {
+    public Ads getAdsMe(Authentication authentication) {
         return adService.getAdsMe();
     }
 

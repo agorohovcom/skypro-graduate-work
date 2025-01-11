@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: sergey_white
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: DATE
+              - column:
+                  name: author_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ad_id
+                  type: INT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: sergey_white
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: comments
+            baseColumnNames: author_id
+            constraintName: fk_comments_users
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: comments
+            baseColumnNames: ad_id
+            constraintName: fk_comments_ads
+            referencedTableName: ads
+            referencedColumnNames: id
