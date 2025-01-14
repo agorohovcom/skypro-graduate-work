@@ -29,5 +29,4 @@ public class Register {
     @Enumerated(EnumType.STRING)
     @Schema(description = "роль пользователя")
     private Role role;
-
 }

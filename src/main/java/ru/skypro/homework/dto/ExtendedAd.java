@@ -24,5 +24,4 @@ public class ExtendedAd {
     private Integer price;
     @Schema(description = "заголовок объявления")
     private String title;
-
 }

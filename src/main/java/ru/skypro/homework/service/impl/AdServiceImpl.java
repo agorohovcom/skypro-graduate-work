@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.mapper.AppMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -56,6 +56,5 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public void updateAdImage(Integer id, MultipartFile image) {
-
     }
 }

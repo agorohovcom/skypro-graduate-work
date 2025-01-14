@@ -16,5 +16,4 @@ public class CreateOrUpdateAd {
     @Schema(description = "описание объявления", minLength = 8, maxLength = 64)
     @Size(min = 8, max = 64)
     private String description;
-
 }

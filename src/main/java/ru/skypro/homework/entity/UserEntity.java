@@ -7,7 +7,6 @@ import ru.skypro.homework.enums.Role;
 
 import java.util.List;
 
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -27,5 +26,4 @@ public class UserEntity {
     private String password;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AdEntity> ads;
-
 }

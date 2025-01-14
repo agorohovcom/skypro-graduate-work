@@ -44,5 +44,4 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(mapper.registerToUserEntity(register));
         return true;
     }
-
 }
