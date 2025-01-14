@@ -1,8 +1,17 @@
 spring:
+#  datasource:
+#    url: jdbc:h2:mem:test_db
+#    username: sa
+#    password:
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
   datasource:
-    url: jdbc:h2:mem:test_db
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/adsDB
+    username: student
+    password: chocolatefrog
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/liquibase/changelog-master.yml

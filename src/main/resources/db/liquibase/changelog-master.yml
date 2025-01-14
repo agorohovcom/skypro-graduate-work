@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/liquibase/scripts/create-table-users.yaml
+  - include:
+      file: db/liquibase/scripts/create-table-ads.yaml
+  - include:
+      file: db/liquibase/scripts/create-table-comments.yaml
+
+

@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: sergey white
+      changes:
+        - createTable:
+            tableName: ads
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: author_id
+                  type: INT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: sergey white
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: ads
+            baseColumnNames: author_id
+            constraintName: fk_ads_users
+            referencedTableName: users
+            referencedColumnNames: id

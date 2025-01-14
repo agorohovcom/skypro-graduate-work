@@ -3,7 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
 @Service

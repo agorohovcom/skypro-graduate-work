@@ -3,13 +3,13 @@ package ru.skypro.homework.service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
 public interface AdService {
     Ads getAllAds();
 
-    Integer addAd(CreateOrUpdateAd ad, MultipartFile image);
+    Ad addAd(CreateOrUpdateAd ad);
 
     ExtendedAd getAd(Integer id);
 

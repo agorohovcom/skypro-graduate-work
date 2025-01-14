@@ -10,6 +10,6 @@ public class Ads {
 
     @Schema(description = "общее количество объявлений")
     private Integer count;
-
     private List<Ad> results;
+
 }
