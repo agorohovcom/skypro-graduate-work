@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.List;
 
-
 @Entity
 @Table(name = "ads")
 @Getter
@@ -25,5 +24,4 @@ public class AdEntity {
     private UserEntity author;
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
-
 }

@@ -20,7 +20,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: created_at
-                  type: DATE
+                  type: TIMESTAMP
               - column:
                   name: author_id
                   type: INT

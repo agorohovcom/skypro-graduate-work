@@ -1,6 +1,5 @@
 package ru.skypro.homework.mapper;
 
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.Ad;
@@ -12,7 +11,11 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
 
-@Mapper(componentModel = "spring")
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+@Mapper(componentModel = "spring", imports = {Instant.class, LocalDateTime.class, ZoneId.class})
 public interface AppMapper {
 // мапперы будут добавляться по необходимости
     @Mapping(source = "username", target = "email")
@@ -51,7 +54,8 @@ public interface AppMapper {
     @Mapping(source = "author.id", target = "author")
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "author.image", target = "authorImage")
-    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(target = "createdAt", expression =
+            "java(commentEntity.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())")
     @Mapping(source = "text",target = "text")
     Comment commentEntityToComment(CommentEntity commentEntity);
 
@@ -59,8 +63,8 @@ public interface AppMapper {
     @Mapping(source = "author", target = "author.id")
     @Mapping(source = "authorFirstName", target = "author.firstName")
     @Mapping(source = "authorImage", target = "author.image")
-    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(target = "createdAt", expression =
+            "java(LocalDateTime.ofInstant(Instant.ofEpochMilli(comment.getCreatedAt()), ZoneId.systemDefault()))")
     @Mapping(source = "text",target = "text")
-    Comment CommentToCommentEntity(CommentEntity commentEntity);
-
+    CommentEntity commentToCommentEntity(Comment comment);
 }

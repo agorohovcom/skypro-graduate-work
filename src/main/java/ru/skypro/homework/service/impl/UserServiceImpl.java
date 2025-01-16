@@ -3,9 +3,9 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.security_dto.NewPassword;
-import ru.skypro.homework.dto.create_update_dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.create_update_dto.UpdateUser;
+import ru.skypro.homework.dto.security_dto.NewPassword;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
@@ -37,5 +37,4 @@ public class UserServiceImpl implements UserService {
     public void updateUserImage(MultipartFile image) {
 
     }
-
 }

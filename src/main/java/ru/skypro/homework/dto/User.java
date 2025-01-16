@@ -24,5 +24,4 @@ public class User {
     private Role role;
     @Schema(description = "ссылка на аватар пользователя")
     private String image;
-
 }
