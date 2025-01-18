@@ -5,7 +5,9 @@ import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.create_update_dto.UpdateUser;
 import ru.skypro.homework.dto.security_dto.Register;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
@@ -25,6 +27,18 @@ public interface AppMapper {
     @Mapping(source = "phone", target = "phone")
     @Mapping(source = "role", target = "role")
     UserEntity registerToUserEntity(Register register);
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
+    @Mapping(source = "phone", target = "phone")
+    @Mapping(source = "role", target = "role")
+    @Mapping(source = "image", target = "image")
+    User userEntityToUser(UserEntity userEntity);
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
+    @Mapping(source = "phone", target = "phone")
+    UpdateUser userEntityToUpdateUser(UserEntity userEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "image", ignore = true)
