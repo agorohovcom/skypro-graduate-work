@@ -39,6 +39,7 @@ public class WebSecurityConfig {
                                         .requestMatchers(AUTH_WHITELIST).permitAll()
                                         .requestMatchers("/ads/**", "/users/**")
                                         .authenticated()
+
 //                                        .anyRequest().permitAll()
                 )
                 .httpBasic(withDefaults());

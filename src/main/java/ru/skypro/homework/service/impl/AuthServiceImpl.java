@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,16 +27,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-//        if (manager.userExists(register.getUsername())) {
-//            return false;
-//        }
-//        UserDetails user =
-//                User.builder()
-//                        .passwordEncoder(this.encoder::encode)
-//                        .password(register.getPassword())
-//                        .username(register.getUsername())
-//                        .roles(register.getRole().name())
-//                        .build();
         UserEntity findUser = userRepository.findByEmail(register.getUsername());
         if (findUser != null) {
             return false;
