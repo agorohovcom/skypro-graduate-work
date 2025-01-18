@@ -10,6 +10,8 @@ import ru.skypro.homework.mapper.AppMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -27,8 +29,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Register register) {
-        UserEntity findUser = userRepository.findByEmail(register.getUsername());
-        if (findUser != null) {
+        Optional<UserEntity> findUser = userRepository.findByEmail(register.getUsername());
+        if (findUser.isPresent()) {
             return false;
         }
         register.setPassword(encoder.encode(register.getPassword()));

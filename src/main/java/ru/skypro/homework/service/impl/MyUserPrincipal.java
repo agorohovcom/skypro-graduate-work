@@ -10,7 +10,7 @@ import java.util.Collections;
 
 public class MyUserPrincipal implements UserDetails {
 
-    private UserEntity user;
+    private final UserEntity user;
 
     public MyUserPrincipal(UserEntity user) {
         this.user = user;
@@ -22,12 +22,12 @@ public class MyUserPrincipal implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return user.getPassword();
+    public String getUsername() {
+        return user.getEmail();
     }
 
     @Override
-    public String getUsername() {
-        return user.getEmail();
+    public String getPassword() {
+        return user.getPassword();
     }
 }

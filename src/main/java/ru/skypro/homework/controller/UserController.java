@@ -9,10 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.security_dto.NewPassword;
-import ru.skypro.homework.dto.create_update_dto.UpdateUser;
 import ru.skypro.homework.dto.User;
-import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.dto.create_update_dto.UpdateUser;
+import ru.skypro.homework.dto.security_dto.NewPassword;
 import ru.skypro.homework.service.UserService;
 
 @RestController
