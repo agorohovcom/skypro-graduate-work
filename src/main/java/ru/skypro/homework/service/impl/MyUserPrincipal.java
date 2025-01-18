@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import ru.skypro.homework.entity.UserEntity;
 import java.util.Collection;
 import java.util.Collections;
 
+@Getter
 public class MyUserPrincipal implements UserDetails {
 
     private final UserEntity user;

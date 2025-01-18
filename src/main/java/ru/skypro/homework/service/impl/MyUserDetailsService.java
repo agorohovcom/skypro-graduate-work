@@ -20,5 +20,4 @@ public class MyUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Нет пользователя с username: " + username));
         return new MyUserPrincipal(findUser);
     }
-
 }
