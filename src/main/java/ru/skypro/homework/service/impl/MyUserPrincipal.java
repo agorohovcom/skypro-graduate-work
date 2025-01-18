@@ -1,16 +1,16 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.entity.UserEntity;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class MyUserPrincipal implements UserDetails {
 
-    private UserEntity user;
+    private final UserEntity user;
 
     public MyUserPrincipal(UserEntity user) {
         this.user = user;
@@ -18,8 +18,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getAuthorities();
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override

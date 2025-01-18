@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.skypro.homework.service.impl.MyUserDetailsService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -38,9 +39,23 @@ public class WebSecurityConfig {
 //        return new InMemoryUserDetailsManager(user);
 //    }
 
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("*"));
+//        configuration.setAllowedHeaders(Arrays.asList("*"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           MyUserDetailsService userDetailsService) throws Exception {
+        http.cors(withDefaults())
+                .userDetailsService(userDetailsService)
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize ->
                                 authorize
