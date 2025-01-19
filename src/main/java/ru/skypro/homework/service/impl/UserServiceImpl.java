@@ -23,36 +23,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setPassword(String username, NewPassword newPassword) {
-        UserEntity user = userRepository.findByEmail(username);
-        if (user != null) {
-            user.setPassword(encoder.encode(newPassword.getNewPassword()));
-            userRepository.save(user);
-        } else {
-            throw new UsernameNotFoundException(username);
-        }
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Нет пользователя с username: " + username));
+        user.setPassword(encoder.encode(newPassword.getNewPassword()));
+        userRepository.save(user);
     }
 
     @Override
     public User getUser(String username) {
-        UserEntity user = userRepository.findByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Нет пользователя с username: " + username));
         return appMapper.userEntityToUser(user);
     }
 
     @Override
     public UpdateUser updateUser(String username, UpdateUser updateUser) {
-        UserEntity user = userRepository.findByEmail(username);
-        if (user != null) {
-            user.setFirstName(updateUser.getFirstName());
-            user.setLastName(updateUser.getLastName());
-            user.setPhone(updateUser.getPhone());
-            userRepository.save(user);
-            return appMapper.userEntityToUpdateUser(user);
-        } else {
-            throw new UsernameNotFoundException(username);
-        }
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Нет пользователя с username: " + username));
+        user.setFirstName(updateUser.getFirstName());
+        user.setLastName(updateUser.getLastName());
+        user.setPhone(updateUser.getPhone());
+        userRepository.save(user);
+        return appMapper.userEntityToUpdateUser(user);
+
     }
 
     @Override

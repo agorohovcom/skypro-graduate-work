@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateComment;
 public interface CommentService {
     Comments getComments(Integer id);
 
-    Long addComment(Integer id, CreateOrUpdateComment comment);
+    Comment addComment(Integer id, CreateOrUpdateComment comment);
 
     void deleteComment(Integer adId, Integer commentId);
 
