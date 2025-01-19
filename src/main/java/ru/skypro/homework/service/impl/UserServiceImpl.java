@@ -1,9 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +22,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final AppMapper appMapper;
+    private final SecurityContextService securityContextService;
 
     @Override
     public void setPassword(String username, NewPassword newPassword) {
@@ -58,33 +56,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserImage(MultipartFile image) {
-        validRulesCheck(getCurrentUserEntity());
-    }
-
-    // Метод для получения текущего пользователя
-    private UserEntity getCurrentUserEntity() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        if (context == null) {
-            throw new ForbiddenException("Пользователь не найден, так как контекст безопасности недоступен");
-        }
-        Authentication authentication = context.getAuthentication();
-        if (authentication == null) {
-            throw new ForbiddenException("Пользователь не аутентифицирован");
-        }
-        Object principal = authentication.getPrincipal();
-        if (!(principal instanceof MyUserPrincipal)) {
-            throw new UsernameNotFoundException("Пользователь не найден или не соответствует типу MyUserPrincipal");
-        }
-
-        MyUserPrincipal myUserPrincipal = (MyUserPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return myUserPrincipal.getUser();
+        validRulesCheck(securityContextService.getCurrentUserEntity());
     }
 
     private void validRulesCheck(UserEntity userEntity) {
-        boolean valid = userEntity.getId().equals(getCurrentUserEntity().getId())
-                || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
+        UserEntity userEntityFromContext = securityContextService.getCurrentUserEntity();
+        boolean valid = userEntity.getId().equals(userEntityFromContext.getId())
+                || userEntityFromContext.getRole().name().equals(Role.ADMIN.name());
         if (!valid) {
             throw new ForbiddenException(
                     "Нет прав доступа к пользователю с логином: " + userEntity.getEmail());

@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -28,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final AdsRepository adsRepository;
     private final AppMapper appMapper;
+    private final SecurityContextService securityContextService;
 
     @Override
     public Comments getComments(Integer id) {
@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         LocalDateTime createAt = LocalDateTime.now();
         AdEntity adEntity = findAd(id);
         CommentEntity commentEntity = appMapper.createOrUpdateCommentToCommentEntity(
-                comment, adEntity, getCurrentUserEntity(), createAt);
+                comment, adEntity, securityContextService.getCurrentUserEntity(), createAt);
         adEntity.getComments().add(commentEntity);
         adsRepository.save(adEntity);
         return appMapper.commentEntityToComment(commentEntity);
@@ -72,13 +72,6 @@ public class CommentServiceImpl implements CommentService {
         return appMapper.commentEntityToComment(commentEntity);
     }
 
-    private UserEntity getCurrentUserEntity() {
-        MyUserPrincipal myUserPrincipal = (MyUserPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return myUserPrincipal.getUser();
-    }
-
     private CommentEntity findComment(Integer adId, Integer commentId) {
         AdEntity adEntity = findAd(adId);
         List<CommentEntity> listOfComments = adEntity.getComments();
@@ -94,10 +87,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void validRulesCheck(CommentEntity commentEntity) {
-        boolean valid = commentEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
-                || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
+        UserEntity userEntityFromContext = securityContextService.getCurrentUserEntity();
+        boolean valid = commentEntity.getAuthor().getId().equals(userEntityFromContext.getId())
+                || userEntityFromContext.getRole().name().equals(Role.ADMIN.name());
         if (!valid) {
-            throw new ForbiddenException("Нет прав для редактирования комментария с id: " + commentEntity.getId());
+            throw new ForbiddenException("Нет прав доступа к комментарию с id: " + commentEntity.getId());
         }
     }
 }

@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -25,6 +24,7 @@ public class AdServiceImpl implements AdService {
 
     private final AdsRepository adsRepository;
     private final AppMapper appMapper;
+    private final SecurityContextService securityContextService;
 
     @Override
     public Ads getAllAds() {
@@ -34,7 +34,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad addAd(CreateOrUpdateAd createOrUpdateAd) {
-        AdEntity adEntity = appMapper.createOrUpdateToAdEntity(createOrUpdateAd, getCurrentUserEntity());
+        AdEntity adEntity = appMapper.createOrUpdateToAdEntity(
+                createOrUpdateAd, securityContextService.getCurrentUserEntity());
         adsRepository.save(adEntity);
         return appMapper.adEntitytoAd(adEntity);
     }
@@ -50,11 +51,7 @@ public class AdServiceImpl implements AdService {
     public void deleteAd(Integer id) {
         AdEntity adEntity = adsRepository.findById(id)
                 .orElseThrow(() -> new AdNotFoundException("Не найдено объявление с id: " + id));
-
-        if (!validRules(adEntity)) {
-            throw new ForbiddenException("У вас нет прав для удаления объявления с id: " + id);
-        }
-
+        validRulesCheck(adEntity);
         adsRepository.deleteById(id);
     }
 
@@ -62,11 +59,7 @@ public class AdServiceImpl implements AdService {
     public Ad updateAd(Integer id, CreateOrUpdateAd createOrUpdateAd) {
         AdEntity adEntity = adsRepository.findById(id).orElseThrow(() ->
                 new AdNotFoundException("Не найдено объявление с id: " + id));
-
-        if (!validRules(adEntity)) {
-            throw new ForbiddenException("У вас нет прав для изменения объявления с id: " + id);
-        }
-
+        validRulesCheck(adEntity);
         appMapper.updateAdEntityFromDto(createOrUpdateAd, adEntity);
         adsRepository.save(adEntity);
         return appMapper.adEntitytoAd(adEntity);
@@ -74,7 +67,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ads getAdsMe() {
-        List<AdEntity> adEntities = adsRepository.findByAuthorId(getCurrentUserEntity().getId());
+        List<AdEntity> adEntities = adsRepository.findByAuthorId(securityContextService.getCurrentUserEntity().getId());
         return getAdsFromListOfAdEntity(adEntities);
     }
 
@@ -83,15 +76,6 @@ public class AdServiceImpl implements AdService {
 
     }
 
-    // возвращает текущего юзера для проверки прав
-    private UserEntity getCurrentUserEntity() {
-        MyUserPrincipal myUserPrincipal = (MyUserPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return myUserPrincipal.getUser();
-    }
-
-    // принимает список AdEntity и возвращает объект Ads
     private Ads getAdsFromListOfAdEntity(List<AdEntity> adEntities) {
         List<Ad> adList = adEntities.stream()
                 .map(appMapper::adEntitytoAd)
@@ -102,8 +86,13 @@ public class AdServiceImpl implements AdService {
         return ads;
     }
 
-    private boolean validRules(AdEntity adEntity) {
-        return adEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
-                || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
+    private void validRulesCheck(AdEntity adEntity) {
+        UserEntity userEntityFromContext = securityContextService.getCurrentUserEntity();
+        boolean valid = adEntity.getAuthor().getId().equals(userEntityFromContext.getId())
+                || userEntityFromContext.getRole().name().equals(Role.ADMIN.name());
+        if (!valid) {
+            throw new ForbiddenException(
+                    "Нет прав доступа к объявлению с id: " + adEntity.getId());
+        }
     }
 }
