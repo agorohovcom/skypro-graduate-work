@@ -22,6 +22,6 @@ public class AdEntity {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private UserEntity author;
-    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CommentEntity> comments;
 }

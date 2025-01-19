@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -47,23 +48,28 @@ public class CommentServiceImpl implements CommentService {
     public Comment addComment(Integer id, CreateOrUpdateComment comment) {
         LocalDateTime createAt = LocalDateTime.now();
         AdEntity adEntity = findAd(id);
-        CommentEntity commentEntity = appMapper.createOrUpdateCommentToCommentEntity(comment,
-                adEntity, getCurrentUserEntity(), createAt);
+        CommentEntity commentEntity = appMapper.createOrUpdateCommentToCommentEntity(
+                comment, adEntity, getCurrentUserEntity(), createAt);
         return appMapper.commentEntityToComment(commentRepository.save(commentEntity));
     }
 
     @Override
+    @Transactional
     public void deleteComment(Integer adId, Integer commentId) {
-        CommentEntity comment = findComment(adId, commentId);
-        commentRepository.delete(comment);
+        CommentEntity commentEntity = findComment(adId, commentId);
+        if (!validRules(commentEntity)) {
+            throw new ForbiddenException("У вас нет прав для удаления комментария с id: " + commentId);
+        }
+        AdEntity adEntity = findAd(adId);
+        adEntity.getComments().remove(commentEntity);
     }
 
     @Override
     public Comment updateComment(Integer adId, Integer commentId,
                                  CreateOrUpdateComment createOrUpdateComment) {
-        CommentEntity comment = findComment(adId, commentId);
-        appMapper.updateCommentEntityFromDto(createOrUpdateComment, comment);
-        return appMapper.commentEntityToComment(commentRepository.save(comment));
+        CommentEntity commentEntity = findComment(adId, commentId);
+        appMapper.updateCommentEntityFromDto(createOrUpdateComment, commentEntity);
+        return appMapper.commentEntityToComment(commentRepository.save(commentEntity));
     }
 
     private UserEntity getCurrentUserEntity() {
@@ -92,6 +98,11 @@ public class CommentServiceImpl implements CommentService {
 
     private boolean validRules(AdEntity adEntity) {
         return adEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
+                || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
+    }
+
+    private boolean validRules(CommentEntity commentEntity) {
+        return commentEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
                 || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
     }
 }
