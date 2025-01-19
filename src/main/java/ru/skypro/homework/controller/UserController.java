@@ -21,7 +21,6 @@ import ru.skypro.homework.service.UserService;
 @Tag(name = "Пользователи")
 public class UserController {
 
-    // todo сервис ещё не реализован
     private final UserService userService;
 
     @PostMapping("/set_password")
