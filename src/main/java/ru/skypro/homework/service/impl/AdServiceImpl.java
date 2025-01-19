@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.dto.create_update_dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.enums.Role;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.mapper.AppMapper;
@@ -50,7 +51,7 @@ public class AdServiceImpl implements AdService {
         AdEntity adEntity = adsRepository.findById(id)
                 .orElseThrow(() -> new AdNotFoundException("Не найдено объявление с id: " + id));
 
-        if (!adEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())) {
+        if (!validRules(adEntity)) {
             throw new ForbiddenException("У вас нет прав для удаления объявления с id: " + id);
         }
 
@@ -62,7 +63,7 @@ public class AdServiceImpl implements AdService {
         AdEntity adEntity = adsRepository.findById(id).orElseThrow(() ->
                 new AdNotFoundException("Не найдено объявление с id: " + id));
 
-        if (!adEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())) {
+        if (!validRules(adEntity)) {
             throw new ForbiddenException("У вас нет прав для изменения объявления с id: " + id);
         }
 
@@ -99,5 +100,10 @@ public class AdServiceImpl implements AdService {
         ads.setCount(adList.size());
         ads.setResults(adList);
         return ads;
+    }
+
+    private boolean validRules(AdEntity adEntity) {
+        return adEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
+                || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
     }
 }

@@ -36,7 +36,7 @@ public class CommentController {
             operationId = "addComment"
     )
     // todo 200, 401, 404
-    public Long addComment(
+    public Comment addComment(
             @PathVariable Integer id,
             @Valid @RequestBody CreateOrUpdateComment comment) {
         return commentService.addComment(id, comment);
@@ -49,9 +49,8 @@ public class CommentController {
     )
     // todo 204, 401, 403, 404
     public void deleteComment(
-            @PathVariable Integer adId,
-            @PathVariable Integer commentId
-    ) {
+            @PathVariable("id") Integer adId,
+            @PathVariable("commentId") Integer commentId) {
         commentService.deleteComment(adId, commentId);
     }
 
@@ -62,8 +61,8 @@ public class CommentController {
     )
     // todo 200, 401, 403, 404
     public Comment updateComment(
-            @PathVariable Integer adId,
-            @PathVariable Integer commentId,
+            @PathVariable("id") Integer adId,
+            @PathVariable("commentId") Integer commentId,
             @Valid @RequestBody CreateOrUpdateComment comment) {
         return commentService.updateComment(adId, commentId, comment);
     }
