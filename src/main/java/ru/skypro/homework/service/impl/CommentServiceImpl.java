@@ -16,7 +16,6 @@ import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.mapper.AppMapper;
 import ru.skypro.homework.repository.AdsRepository;
-import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
 
 import java.time.LocalDateTime;
@@ -28,7 +27,6 @@ import java.util.Objects;
 public class CommentServiceImpl implements CommentService {
 
     private final AdsRepository adsRepository;
-    private final CommentRepository commentRepository;
     private final AppMapper appMapper;
 
     @Override
@@ -45,12 +43,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Comment addComment(Integer id, CreateOrUpdateComment comment) {
         LocalDateTime createAt = LocalDateTime.now();
         AdEntity adEntity = findAd(id);
         CommentEntity commentEntity = appMapper.createOrUpdateCommentToCommentEntity(
                 comment, adEntity, getCurrentUserEntity(), createAt);
-        return appMapper.commentEntityToComment(commentRepository.save(commentEntity));
+        adEntity.getComments().add(commentEntity);
+        adsRepository.save(adEntity);
+        return appMapper.commentEntityToComment(commentEntity);
     }
 
     @Override
@@ -63,11 +64,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
         CommentEntity commentEntity = findComment(adId, commentId);
         validRulesCheck(commentEntity);
         appMapper.updateCommentEntityFromDto(createOrUpdateComment, commentEntity);
-        return appMapper.commentEntityToComment(commentRepository.save(commentEntity));
+        return appMapper.commentEntityToComment(commentEntity);
     }
 
     private UserEntity getCurrentUserEntity() {
