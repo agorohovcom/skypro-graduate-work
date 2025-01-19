@@ -57,17 +57,15 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void deleteComment(Integer adId, Integer commentId) {
         CommentEntity commentEntity = findComment(adId, commentId);
-        if (!validRules(commentEntity)) {
-            throw new ForbiddenException("У вас нет прав для удаления комментария с id: " + commentId);
-        }
+        validRulesCheck(commentEntity);
         AdEntity adEntity = findAd(adId);
         adEntity.getComments().remove(commentEntity);
     }
 
     @Override
-    public Comment updateComment(Integer adId, Integer commentId,
-                                 CreateOrUpdateComment createOrUpdateComment) {
+    public Comment updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
         CommentEntity commentEntity = findComment(adId, commentId);
+        validRulesCheck(commentEntity);
         appMapper.updateCommentEntityFromDto(createOrUpdateComment, commentEntity);
         return appMapper.commentEntityToComment(commentRepository.save(commentEntity));
     }
@@ -81,9 +79,6 @@ public class CommentServiceImpl implements CommentService {
 
     private CommentEntity findComment(Integer adId, Integer commentId) {
         AdEntity adEntity = findAd(adId);
-        if (!validRules(adEntity)) {
-            throw new ForbiddenException("У вас нет прав для изменения объявления с id: " + adId);
-        }
         List<CommentEntity> listOfComments = adEntity.getComments();
             return listOfComments.stream()
                     .filter(commentEntity -> (Objects.equals(commentEntity.getId(), commentId)))
@@ -96,14 +91,12 @@ public class CommentServiceImpl implements CommentService {
                 new AdNotFoundException("Не найдено объявление с id: " + adId));
     }
 
-    private boolean validRules(AdEntity adEntity) {
-        return adEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
+    private void validRulesCheck(CommentEntity commentEntity) {
+        boolean valid = commentEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
                 || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
-    }
-
-    private boolean validRules(CommentEntity commentEntity) {
-        return commentEntity.getAuthor().getId().equals(getCurrentUserEntity().getId())
-                || getCurrentUserEntity().getRole().name().equals(Role.ADMIN.name());
+        if (!valid) {
+            throw new ForbiddenException("Нет прав для редактирования комментария с id: " + commentEntity.getId());
+        }
     }
 }
 
