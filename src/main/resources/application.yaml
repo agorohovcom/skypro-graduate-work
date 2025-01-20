@@ -1,11 +1,4 @@
 spring:
-#  datasource:
-#    url: jdbc:h2:mem:test_db
-#    username: sa
-#    password:
-#  jpa:
-#    hibernate:
-#      ddl-auto: create
   datasource:
     url: jdbc:postgresql://localhost:5432/adsDB
     username: student

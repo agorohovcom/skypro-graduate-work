@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.security_dto.NewPassword;
-import ru.skypro.homework.dto.create_update_dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.create_update_dto.UpdateUser;
+import ru.skypro.homework.dto.security_dto.NewPassword;
 import ru.skypro.homework.service.UserService;
 
 @RestController
@@ -20,17 +21,18 @@ import ru.skypro.homework.service.UserService;
 @Tag(name = "Пользователи")
 public class UserController {
 
-    // todo сервис ещё не реализован
     private final UserService userService;
 
-    @PatchMapping("/set_password")
+    @PostMapping("/set_password")
     @Operation(
             summary = "Обновление пароля",
             operationId = "setPassword"
     )
     // todo 200, 401
-    public void setPassword(@Valid @RequestBody NewPassword newPassword) {
-        userService.setPassword(newPassword);
+    public void setPassword(@Valid @RequestBody NewPassword newPassword,
+                            Authentication authentication) {
+        String userName = authentication.getName();
+        userService.setPassword(userName, newPassword);
     }
 
     @GetMapping("/me")
@@ -39,8 +41,9 @@ public class UserController {
             operationId = "getUser"
     )
     // todo 200, 401
-    public User getUser() {
-        User authenticatedUser = userService.getUser();
+    public User getUser(Authentication authentication) {
+        String username = authentication.getName();
+        User authenticatedUser = userService.getUser(username);
         if (authenticatedUser != null) {
             return authenticatedUser;
         } else {
@@ -54,15 +57,10 @@ public class UserController {
             operationId = "updateUser"
     )
     // todo 200, 401
-    public UpdateUser updateUser(@Valid @RequestBody UpdateUser updateUser) {
-        User authenticatedUser = getUser();
-
-        UpdateUser result = userService.updateUser(updateUser);
-        if (updateUser == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь не найден или ошибка валидации");
-        }
-
-        return result;
+    public UpdateUser updateUser(@Valid @RequestBody UpdateUser updateUser,
+                                 Authentication authentication) {
+        String username = authentication.getName();
+        return userService.updateUser(username, updateUser);
     }
 
     @PatchMapping("/me/image")
@@ -72,7 +70,6 @@ public class UserController {
     )
     // todo 200, 401
     public void updateUserImage(@RequestParam("image") MultipartFile image) {
-        User autentificatedUser = getUser();
         userService.updateUserImage(image);
     }
 }
